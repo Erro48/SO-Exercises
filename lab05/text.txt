@@ -1,0 +1,10 @@
+* ciao 	come* stai? I*o sto bene
+*ciao ciao	ci*ao ciao ciao ci*ao
+come come* come	come *come come
+v*a va	 va va	va *va va va *va va
+????*????	?	??????????*????? ? ???*
+io bene io be*ne io bene		io bene
+otti*mo!!	*
+cut -b 3-5,10-15 text.txt
+cut -b 3-5,10-15 text.txt | sed 's/\t//g' | sed 's/ //g' | sed 's/*//g'
+cut -b 3-5,10-15 text.txt | sed 's/\t//g' | sed 's/ //g' | sed 's/*//g' | wc -c
