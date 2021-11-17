@@ -1,11 +1,10 @@
 #!/bin/bash
 
-tmp_rand=$RANDOM
 counter=1
-
-while (( $tmp_rand%10 != 2 )); do
-	(( counter=$counter+1 ))
-	(( tmp_rand=$RANDOM ))
+myrand=$RANDOM
+while [ $((myrand%10)) -ne 2 ];do
+	myrand=$RANDOM
+	(( counter++ ))
 done
 
-echo "Variabile letta $counter volte [$tmp_rand]"
+echo "Variabile RANDOM letta in totale $counter volte ($myrand)"

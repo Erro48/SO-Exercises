@@ -1,15 +1,15 @@
 #!/bin/bash
 
-LungNomeDir=0
-fileCounter=0
+LungNomiDirectory=0
+nFiles=0
 
-for file in `ls`; do
-	if [[ -d $file ]]; then
-		(( LungNomeDir=$LungNomeDir+${#file} ))
+for elem in `ls`; do
+	if [[ -d $elem ]]; then
+		(( LungNomiDirectory=$LungNomiDirectory+${#elem} ))
 	else
-		(( fileCounter=$fileCounter+1 ))
+		(( nFiles=$nFiles+1 ))
 	fi
 done
 
-echo "LungNomeDir=$LungNomeDir"
-echo "# file=$fileCounter"
+echo "I file di tipo non-dir sono $nFiles"
+echo "La lunghezza accumulata dei nomi delle dir è: $LungNomiDirectory"

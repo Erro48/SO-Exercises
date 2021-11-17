@@ -1,11 +1,11 @@
 #!/bin/bash
 
-counter=0
-while read riga; do
-	if [ $counter == 0 ]; then
-		(( counter=1 ));
-		echo $riga;
-	else
-		(( counter=0 ));
+COUNTER=0
+CONTENT=""
+
+while read CONTENT;do
+	if [ $((COUNTER%2)) -eq 0 ]; then
+		echo $CONTENT;
 	fi
+	(( COUNTER=$COUNTER+1 ))
 done

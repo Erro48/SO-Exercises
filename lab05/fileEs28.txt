@@ -1,0 +1,16 @@
+ciao	come va ?
+co*me stai?
+leo *dal	grande membro
+pr*oprio		vero
+sads a	*dsad
+1234567890123456789012345678901234567890
+ao	 va ?
+*mei?
+o *grande
+*op	vero
+ds sad
+345012345
+cut -c 3-5,10-15 fileEs28.txt
+cut -c 3-5,10-15 fileEs28.txt | sed 's/[ ]//g' | sed 's/[\t]//g' | sed 's/[*]//g'
+cut -c 3-5,10-15 fileEs28.txt | sed 's/[ \t*]//g'
+cut -c 3-5,10-15 fileEs28.txt | sed 's/[ \t*]//g' | wc -m
