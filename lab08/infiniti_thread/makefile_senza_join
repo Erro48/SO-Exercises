@@ -1,0 +1,16 @@
+LIBRARIES=-lpthread
+CFLAGS=-ansi -Wpedantic -Wall -D_THREAD_SAFE -D_POSIX_C_SOURCE=200112L
+
+all: senza_join.exe
+
+senza_join.exe: senza_join.o
+	gcc -o senza_join.exe senza_join.o ${LIBRARIES}
+
+
+senza_join.o: senza_join.c
+	gcc ${CFLAGS} -c senza_join.c
+
+.PHONY: clean
+
+clean:
+	rm -f senza_join.exe senza_join.o

@@ -1,0 +1,16 @@
+LIBRARIES=-lpthread
+CFLAGS=-ansi -Wpedantic -Wall -D_THREAD_SAFE -D_POSIX_C_SOURCE=200112L
+
+all: con_join.exe
+
+con_join.exe: con_join.o
+	gcc -o con_join.exe con_join.o ${LIBRARIES}
+
+
+con_join.o: con_join.c
+	gcc ${CFLAGS} -c con_join.c
+
+.PHONY: clean
+
+clean:
+	rm -f *.exe *.o
