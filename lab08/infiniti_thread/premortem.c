@@ -31,5 +31,6 @@ int main() {
 	data->id = pthread_self();
 
 	pthread_create(&tid,NULL,threadBody,(void*)data);
+	pthread_exit(0);
 	return(0);
 }
