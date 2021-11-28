@@ -1,0 +1,16 @@
+LIBRARIES=-lpthread
+CFLAGS=-ansi -Wpedantic -Wall -D_THREAD_SAFE -D_POSIX_C_SOURCE=200112L
+
+all: struttura.exe
+
+struttura.exe: struttura.o
+	gcc -o struttura.exe struttura.o ${LIBRARIES}
+
+
+struttura.o: struttura.c
+	gcc ${CFLAGS} -c  struttura.c
+
+.PHONY: clean
+
+clean:
+	rm -f *.exe *.o
