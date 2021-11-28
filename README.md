@@ -13,6 +13,9 @@ References of the pages of the lessons found at `www.cs.unibo.it/~ghini/didattic
 References of the pages of the lessons found at `http://www.cs.unibo.it/~ghini/didattica/sistemioperativi/4bis4_laboratorioshell.pdf`:
   1. Lesson 6: 01 - 18
  
- References of the pages of the lessons found at `http://www.cs.unibo.it/~ghini/didattica/sistemioperativi/2d_laboratorio_C_Makefile_utils.pdf`:
+References of the pages of the lessons found at `http://www.cs.unibo.it/~ghini/didattica/sistemioperativi/2d_laboratorio_C_Makefile_utils.pdf`:
   1. Lesson 6: 01 - 18
   2. Lesson 7: 19 - 28
+
+References of the pages of the lessons found at `http://www.cs.unibo.it/~ghini/didattica/sistemioperativi/5bis_laboratorio_ProgrammazioneConcorrenteInC_PosixThread.pdf`:
+  1. Lesson 8: 02 - 09
