@@ -1,0 +1,16 @@
+LIBRARIES=-lpthread
+CFLAGS=-ansi -Wpedantic -Wall -D_THREAD_SAFE -D_POSIX_C_SOURCE=200112L
+
+all: banche.exe
+
+banche.exe: banche.o
+	gcc -o banche.exe banche.o ${LIBRARIES}
+
+
+banche.o: banche.c
+	gcc ${CFLAGS} -c banche.c
+
+.PHONY: clean
+
+clean:
+	rm -f *.exe *.o
