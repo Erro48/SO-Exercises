@@ -10,13 +10,19 @@ void* fakir(void* args);
 
 pthread_mutex_t swords[SWORDS_NUM];
 
+int swords_index;
+
 int main() {
 	int errCre;
+	int* val = (int*)malloc(sizeof(int));
 	pthread_t tid1, tid2;
-	errCre = pthread_create(&tid1, NULL, fakir, NULL);
+	swords_index = 0;
+	*val = 1;
+	errCre = pthread_create(&tid1, NULL, fakir, (void*)val);
 	if (errCre != 0) printf("[ERROR:1] code: %i\n", errCre);
 
-	errCre = pthread_create(&tid2, NULL, fakir, NULL);
+	*val = 2;
+	errCre = pthread_create(&tid2, NULL, fakir, (void*)val);
 	if (errCre != 0) printf("[ERROR:2] code: %i\n", errCre);
 
 	pthread_exit(0);
@@ -24,6 +30,6 @@ int main() {
 }
 
 void * fakir(void* args) {
-
+	
 	pthread_exit(NULL);
 }
