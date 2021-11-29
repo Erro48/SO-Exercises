@@ -7,16 +7,17 @@
 #define SWORDS_NUM 10
 
 void* fakir(void* args);
+void initSwords();
 
-pthread_mutex_t swords[SWORDS_NUM];
+pthread_mutex_t mutex_swords[SWORDS_NUM];
 
-int swords_index;
+int swords[SWORDS_NUM];
 
 int main() {
 	int errCre;
 	int* val = (int*)malloc(sizeof(int));
 	pthread_t tid1, tid2;
-	swords_index = 0;
+	initSwords();
 	*val = 1;
 	errCre = pthread_create(&tid1, NULL, fakir, (void*)val);
 	if (errCre != 0) printf("[ERROR:1] code: %i\n", errCre);
@@ -29,7 +30,16 @@ int main() {
 	return 0;
 }
 
+void initSwords() {
+	int i;
+	for (i = 0; i < SWORDS_NUM; i++) {
+		swords[i] = 1;
+	}
+}
+
 void * fakir(void* args) {
-	
+	while (1) {
+		pthread_mutex_lock(
+	}
 	pthread_exit(NULL);
 }
