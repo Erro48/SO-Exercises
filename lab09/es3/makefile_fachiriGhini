@@ -1,0 +1,16 @@
+LIBRARIES=-lpthread
+CFLAGS=-ansi -Wpedantic -Wall -D_THREAD_SAFE -D_POSIX_C_SOURCE=200112L
+
+all: fachiriGhini.exe
+
+fachiriGhini.exe: fachiriGhini.o
+	gcc -o fachiriGhini.exe fachiriGhini.o ${LIBRARIES}
+
+
+fachiriGhini.o: fachiriGhini.c
+	gcc ${CFLAGS} -c fachiriGhini.c
+
+.PHONY: clean
+
+clean:
+	rm -f *.exe *.o
