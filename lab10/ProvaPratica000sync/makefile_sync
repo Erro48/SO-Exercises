@@ -1,0 +1,19 @@
+LIBRARIES=-lpthread
+CFLAGS=-ansi -Wpedantic -Wall -D_THREAD_SAFE -D_POSIX_C_SOURCE=200112L
+
+all: sync.exe
+
+sync.exe: sync.o DBGpthread.o
+	gcc -o sync.exe sync.o DBGpthread.o ${LIBRARIES}
+
+
+sync.o: sync.c printerror.h DBGpthread.h
+	gcc ${CFLAGS} -c sync.c
+
+DBGpthread.o: DBGpthread.c printerror.h
+	gcc -c DBGpthread.c
+
+.PHONY: clean
+
+clean:
+	rm -f *.exe *.o
