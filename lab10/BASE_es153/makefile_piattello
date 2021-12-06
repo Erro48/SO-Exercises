@@ -1,0 +1,19 @@
+LIBRARIES=-lpthread
+CFLAGS=-ansi -Wpedantic -Wall -D_THREAD_SAFE -D_POSIX_C_SOURCE=200112L
+
+all: piattello.exe
+
+piattello.exe: piattello.o DBGpthread.o
+	gcc -o piattello.exe piattello.o DBGpthread.o ${LIBRARIES}
+
+
+piattello.o: piattello.c printerror.h DBGpthread.h
+	gcc ${CFLAGS} -c piattello.c
+
+DBGpthread.o: DBGpthread.c printerror.h
+	gcc -c DBGpthread.c
+
+.PHONY: clean
+
+clean:
+	rm -f *.exe *.o
