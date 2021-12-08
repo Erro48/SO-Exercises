@@ -13,7 +13,7 @@ int arrives[NTHREAD];
 int order;
 
 pthread_mutex_t mutex;
-pthread_cond_t cond, condExit;
+pthread_cond_t cond;
 
 void initArrives() {
 	int i;
@@ -109,6 +109,8 @@ int main() {
 		*t = i;
 		pthread_create(&tid[i], NULL, threadBody, (void*)t);
 	}
+	DBGpthread_mutex_destroy(&mutex, NULL);
+	DBGpthread_cond_destroy(&cond, NULL);
 	pthread_exit(NULL);
 	return 0;
 }
