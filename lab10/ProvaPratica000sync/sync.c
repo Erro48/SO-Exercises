@@ -10,9 +10,10 @@
 #define DELAY 1
 
 int arrivi[NTHREAD];
+int ordine;
 
 pthread_mutex_t mutex;
-pthread_cond_t cond;
+pthread_cond_t cond, condFine;
 
 void initArrivi() {
 	int i;
@@ -23,8 +24,8 @@ void initArrivi() {
 
 /* restituisce 1 l'unica cella a 0 in arrivi è arrivi[indice] */
 int sonoUltimo(int indice) {
-	if (arrivi[indice]) return 0;
 	int i;
+	if (arrivi[indice]) return 0;
 	for (i = 0; i < NTHREAD; i++) {
 		if (i != indice && arrivi[i] == 0) {
 			/* non sono l'ultimo */
@@ -42,11 +43,29 @@ int tuttiArrivati() {
 	return 1;
 }
 
+void randomSleep() {
+	int n = rand()%3;
+	sleep(n);
+}
+
 void* threadBody(void* arg) {
-	int indice;
+	int indice, turno;
+	int exit = 0;
 	indice = *((int*)arg);
 	free(arg);
+
+	randomSleep();
+	
+	pthread_mutex_lock(&mutex);
 	printf("Sono iniziato %i\n", indice);
+	/* mi segno l'ordine di arrivo */
+	turno = ordine;
+	ordine++;
+	/* sono passati tutti i thread */
+	if (ordine >= NTHREAD) {
+		ordine = 0;
+	}
+	pthread_mutex_unlock(&mutex);
 
 	sleep(DELAY);
 
@@ -60,17 +79,30 @@ void* threadBody(void* arg) {
 	if (!tuttiArrivati()) {
 		pthread_cond_wait(&cond, &mutex);
 	}
-	printf("Sono finito %i\n", indice);
 	pthread_mutex_unlock(&mutex);
+
+	while (!exit) {
+		pthread_mutex_lock(&mutex);
+		if (ordine == turno) {
+			exit = 1;
+			ordine++;
+		}
+		pthread_mutex_unlock(&mutex);
+	}
+	
+	printf("Sono finito %i\n", indice);
+
 	pthread_exit(NULL);
 }
 
 int main() {
-	DBGpthread_mutex_init(&mutex, NULL, NULL);
-	DBGpthread_cond_init(&cond, NULL, NULL);
 	int i;
 	pthread_t tid[NTHREAD];
+	srand(time(NULL));
+	DBGpthread_mutex_init(&mutex, NULL, NULL);
+	DBGpthread_cond_init(&cond, NULL, NULL);
 	initArrivi();
+	ordine = 0;
 	for (i = 0; i < NTHREAD; i++) {
 		int* t;
 		t = (int*)malloc(sizeof(int));
