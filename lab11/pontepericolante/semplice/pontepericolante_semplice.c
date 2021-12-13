@@ -23,6 +23,8 @@ int biglietto[2];
 
 /* aggiungete le variabili che credete vi servano */
 /* INIZIO PRIMA PARTE DA COMPLETARE */
+int autoSulLato[2];
+int ponte;
 
 /* FINE PRIMA PARTE DA COMPLETARE */
 
@@ -33,12 +35,34 @@ pthread_mutex_t  mutexDistributori;
 pthread_mutex_t  mutex;
 pthread_cond_t   condPonteLibero;
 
+int getNAuto(int indice) {
+	return bigliettoDistributore[indice] - biglietto[indice];
+}
+
+int latoGiusto(int indiceSenso) {
+	int indiceOpposto = indiceSenso==INDICESENSOORARIO ? INDICESENSOORARIO : INDICESENSOANTIORARIO;
+/*	printf("A: %i\nO: %i\n", getNAuto(INDICESENSOANTIORARIO), getNAuto(INDICESENSOORARIO));*/
+	if (getNAuto(indiceSenso) == getNAuto(indiceOpposto)
+			&& getNAuto(indiceSenso) != 0) {
+		int res = indiceSenso == INDICESENSOORARIO ? 1 : 0;
+		printf("res %i\n", res);
+		return res;
+	} else if (getNAuto(indiceSenso) > getNAuto(indiceOpposto)
+		|| getNAuto(indiceSenso) == 0) {
+		printf("1\n");
+		return 1;
+	}
+	printf("0\n");
+	return 0;
+}
+
 void *Auto (void *arg) 
 { 
 	char Plabel[128];
 	intptr_t indice;
 	int myBiglietto, indiceSenso;
 	char senso; /* O orario  A antiorario */
+	int puoPassare = 0;
 
 	/* le prime NUMAUTOORARIO auto viaggiano in senso ORARIO
 	   le successive viaggiano in senso ANTIORARIO */
@@ -57,7 +81,7 @@ void *Auto (void *arg)
 	   l'auto viaggia in senso ANTIORARIO
 	*/
 
-	sprintf(Plabel,"%cA%" PRIiPTR "", senso, indice);
+	sprintf(Plabel,"%c%" PRIiPTR "", senso, indice);
 
 	while(1) {
 		DBGpthread_mutex_lock(&mutexDistributori,Plabel); 
@@ -73,7 +97,21 @@ void *Auto (void *arg)
 		   la regola di precedenza
 		 */
 		/* INIZIO SECONDA PARTE DA COMPLETARE */
-
+		DBGpthread_mutex_lock(&mutex, Plabel);
+		while (!puoPassare) {
+			if (ponte == 0
+			 && latoGiusto(indiceSenso)
+			 && myBiglietto == biglietto[indiceSenso]) {
+				/* passo */
+				puoPassare = 1;
+				ponte = 1;
+				biglietto[indiceSenso]++;
+			} else {
+				printf("auto %s aspetta con biglietto %i\n", Plabel, myBiglietto);
+				DBGpthread_cond_wait(&condPonteLibero, &mutex, Plabel);
+			}
+		}
+/*		DBGpthread_mutex_unlock(&mutex, Plabel);*/
 
 		/* FINE SECONDA PARTE DA COMPLETARE */
 		printf("auto %s inizia attraversamento ponte con biglietto %i \n", Plabel,
@@ -82,7 +120,7 @@ void *Auto (void *arg)
 
 		/* Auto comincia ad attraversare il ponte */
 		/* INIZIO TERZA PARTE DA COMPLETARE */
-
+		
 
 		/* FINE TERZA PARTE DA COMPLETARE */
 
@@ -92,6 +130,11 @@ void *Auto (void *arg)
 		   ed avvisa di avere finito l'attraversamento */
 		/* INIZIO QUARTA PARTE DA COMPLETARE */
 
+/*		DBGpthread_mutex_lock(&mutex, Plabel);*/
+		puoPassare = 0;
+		ponte = 0;
+		DBGpthread_cond_broadcast(&condPonteLibero, Plabel);
+		DBGpthread_mutex_unlock(&mutex, Plabel);
 
 		/* FINE QUARTA PARTE DA COMPLETARE */
 
@@ -124,7 +167,9 @@ int main ( int argc, char* argv[] )
 	for( i=0; i<2; i++ ) {
 		bigliettoDistributore[i]=0;
 		biglietto[i]=0;
+		autoSulLato[i]=0;
 	}
+	ponte = 0;
 
 	/* completare con l'inizializzazione delle vostre variabili
 	   se ne avete aggiunta qualcuna */
