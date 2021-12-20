@@ -6,3 +6,13 @@ if (( $# > 9 )); then
     exit;
 fi
 
+index=1;
+while (( $index <= $# )); do
+    if (( $index % 2 == 0 )); then
+        # se è pari
+        echo `wc -l ${!index}`
+    else
+        echo `wc -l ${!index}` >&2
+    fi
+    (( index = $index + 1 ))
+done
