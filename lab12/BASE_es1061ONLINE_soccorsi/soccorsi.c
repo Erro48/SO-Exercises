@@ -30,10 +30,8 @@ pthread_cond_t condFineSoccorso;
 
 /* aggiungete le vostre variabili globali */
 
-/*
 int NumSoccorritoriArrivati=0;
-pthread_cond_t condInizioSoccorso;
-*/
+pthread_cond_t condInizioSoccorso, condFineSoccorsoSoccorritori;
 
 /* ruoli */
 #define MEDICO 1
@@ -53,6 +51,15 @@ void *Soccorritore (char *Label, int ruolo)
 		/* occorre aspettare di essere in due soccorritori */
 
 		/* da completare */
+		NumSoccorritoriArrivati++;
+
+		if (NumSoccorritoriArrivati == NUMMEDICI + NUMESORCISTI) {
+			DBGpthread_cond_broadcast(&condInizioSoccorso, Label);
+		}
+
+		while (NumSoccorritoriArrivati < NUMMEDICI + NUMESORCISTI) {
+			DBGpthread_cond_wait(&condInizioSoccorso, &mutex, Label);
+		}
 
 
 
@@ -75,7 +82,19 @@ void *Soccorritore (char *Label, int ruolo)
 
 
 		/* da completare */
-	
+		NumSoccorritoriArrivati--;
+
+		if (NumSoccorritoriArrivati == 0) {
+			/* se sono l'ultimo */
+			DBGpthread_cond_broadcast(&condFineSoccorsoSoccorritori, Label);
+			DBGpthread_cond_signal(&condFineSoccorso, Label);
+			richiestaAiuto = 0;
+		}
+
+		while (NumSoccorritoriArrivati != 0) {
+			DBGpthread_cond_wait(&condFineSoccorsoSoccorritori, &mutex, Label);
+		}
+		
 
 	
 		printf("soccorritore %s va via \n", Label );
@@ -153,8 +172,12 @@ int main ( int argc, char* argv[] )
 	if( rc ) PrintERROR_andExit(rc,"pthread_mutex_init failed");
 	rc = pthread_cond_init(&condRichiestaAiuto, NULL);
 	if( rc ) PrintERROR_andExit(rc,"pthread_cond_init failed");
+	rc = pthread_cond_init(&condInizioSoccorso, NULL);
+	if(rc) PrintERROR_andExit(rc,"pthread_cond_init failed");
 	rc = pthread_cond_init(&condFineSoccorso, NULL);
-	if(rc) PrintERROR_andExit(rc,"pthread_create failed");
+	if(rc) PrintERROR_andExit(rc,"pthread_cond_init failed");
+	rc = pthread_cond_init(&condFineSoccorsoSoccorritori, NULL);
+	if(rc) PrintERROR_andExit(rc,"pthread_cond_init failed");
 
 
 	/* inizializzate le vostre variabili globali */
