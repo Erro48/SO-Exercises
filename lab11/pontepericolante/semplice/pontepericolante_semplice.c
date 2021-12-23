@@ -42,10 +42,18 @@ int getNAuto(int indice) {
 int latoGiusto(int indiceSenso) {
 	int indiceOpposto = indiceSenso==INDICESENSOORARIO ? INDICESENSOORARIO : INDICESENSOANTIORARIO;
 /*	printf("A: %i\nO: %i\n", getNAuto(INDICESENSOANTIORARIO), getNAuto(INDICESENSOORARIO));*/
+/*	printf("a->d: %i|b: %i \t o->d: %i|b: %i\n",
+		bigliettoDistributore[INDICESENSOANTIORARIO],
+		biglietto[INDICESENSOANTIORARIO],
+		bigliettoDistributore[INDICESENSOORARIO],
+		biglietto[INDICESENSOORARIO]);
+	printf("a: %i \t o: %i\n", getNAuto(INDICESENSOANTIORARIO), getNAuto(INDICESENSOORARIO));*/
 	if (getNAuto(indiceSenso) == getNAuto(indiceOpposto)
 			&& getNAuto(indiceSenso) != 0) {
 		int res = indiceSenso == INDICESENSOORARIO ? 1 : 0;
 		printf("res %i\n", res);
+		printf("%i) d%i b%i\n", res, bigliettoDistributore[res], biglietto[res]);
+		printf("%i) d%i b%i\n", !res, bigliettoDistributore[!res], biglietto[!res]);
 		return res;
 	} else if (getNAuto(indiceSenso) > getNAuto(indiceOpposto)
 		|| getNAuto(indiceSenso) == 0) {
